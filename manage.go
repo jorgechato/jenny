@@ -23,12 +23,12 @@ func main() {
 	}
 
 	fmt.Println(j.PasswordMatch("sd"))
-	//p := prompt.New(
-	////kube.Executor,
-	////kube.Completer,
-	//prompt.OptionTitle("jenny: interactive Jenkins CLI"),
-	//prompt.OptionPrefix(">>> "),
-	//prompt.OptionInputTextColor(prompt.Yellow),
-	//)
-	//p.Run()
+	p := prompt.New(
+		//kube.Executor,
+		//kube.Completer,
+		prompt.OptionTitle("jenny: interactive Jenkins CLI"),
+		prompt.OptionPrefix(">>> "),
+		prompt.OptionInputTextColor(prompt.Yellow),
+	)
+	p.Run()
 }
