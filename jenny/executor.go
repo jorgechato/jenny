@@ -9,24 +9,37 @@ import (
 
 func Executor(s string) {
 	s = strings.TrimSpace(s)
-	fmt.Println(s)
+	in := strings.Split(s, " ")
 
-	if s == "" {
-		return
-	} else if s == "quit" || s == "exit" {
+	first := in[0]
+	switch first {
+	case "quit", "exit", "q":
 		fmt.Println("Bye!")
 		os.Exit(0)
 		return
-	} else if s == "profile" {
-		//TODO: isConfigure discard config, if not exit jenny
-		if !IsConfigured() {
-			os.Exit(0)
-		} else {
-			//TODO: relunch default config
+	case "profile":
+		second := in[1]
+		switch second {
+		case "cancel":
+			if !IsConfigured() {
+				os.Exit(0)
+				return
+			} else {
+				//TODO: lunch default config
+			}
+		case "save":
+			if len(in) == 3 && (in[2] == "-f" || in[2] == "--force-save") {
+				//TODO: save yaml
+			}
+		case "pwd", "user", "use", "name", "uri":
+			//third := in[2]
+			//TODO: set profile
 		}
 		return
-	} else if s == "save" {
-		//TODO: save yaml
+	//TODO: add jenkins api and credential middleware
+	case "":
+		return
+	default:
 		return
 	}
 }

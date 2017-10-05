@@ -46,18 +46,18 @@ func Menu() {
 		jenny.Completer,
 		prompt.OptionTitle("Jenny: interactive Jenkins CLI"),
 		prompt.OptionPrefix(">>> "),
-		prompt.OptionPrefixTextColor(prompt.Red),
-		prompt.OptionPreviewSuggestionTextColor(prompt.DarkGreen),
+		prompt.OptionPrefixTextColor(prompt.DarkGray),
+		//prompt.OptionPreviewSuggestionTextColor(prompt.DarkGreen),
 
-		prompt.OptionSuggestionBGColor(prompt.DefaultColor),
-		prompt.OptionDescriptionBGColor(prompt.DefaultColor),
-		prompt.OptionSuggestionTextColor(prompt.DefaultColor),
-		prompt.OptionDescriptionTextColor(prompt.DefaultColor),
+		prompt.OptionSuggestionBGColor(prompt.Black),
+		prompt.OptionDescriptionBGColor(prompt.Black),
+		prompt.OptionSuggestionTextColor(prompt.White),
+		prompt.OptionDescriptionTextColor(prompt.White),
 
-		prompt.OptionSelectedSuggestionBGColor(prompt.DarkGreen),
-		prompt.OptionSelectedDescriptionBGColor(prompt.DefaultColor),
+		prompt.OptionSelectedSuggestionBGColor(prompt.DarkGray),
+		prompt.OptionSelectedDescriptionBGColor(prompt.DarkGray),
 		prompt.OptionSelectedSuggestionTextColor(prompt.White),
-		prompt.OptionSelectedDescriptionTextColor(prompt.DarkGreen),
+		prompt.OptionSelectedDescriptionTextColor(prompt.White),
 	)
 	p.Run()
 }

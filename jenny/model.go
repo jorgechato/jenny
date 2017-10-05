@@ -4,6 +4,7 @@ type Jenkins struct {
 	Uri      string
 	User     string
 	Password string
+	Name     string
 }
 
 func (j *Jenkins) PasswordMatch(password string) bool {
