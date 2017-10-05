@@ -7,9 +7,7 @@ type Jenkins struct {
 }
 
 func (j *Jenkins) PasswordMatch(password string) bool {
-	hash := GetMD5Hash(password)
-
-	if hash == j.Password {
+	if password == j.Password {
 		return true
 	}
 

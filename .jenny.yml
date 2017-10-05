@@ -1,0 +1,9 @@
+profiles:
+    - name: "Default"
+        uri: "http://localhost:8080"
+        user: "admin"
+        password: "1234"
+    - name: "test"
+        uri: "http://localhost:8080"
+        user: "test"
+        password: "test"
