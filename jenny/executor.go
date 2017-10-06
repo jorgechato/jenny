@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	//"gopkg.in/yaml.v2"
 )
 
 func Executor(s string) {
@@ -21,19 +20,35 @@ func Executor(s string) {
 		second := in[1]
 		switch second {
 		case "cancel":
-			if !IsConfigured() {
+			if jenkins.IsEmpty() {
+				fmt.Println("Configuration aborted")
+				fmt.Println("Bye!")
 				os.Exit(0)
 				return
-			} else {
-				//TODO: lunch default config
 			}
+		case "show":
+			PrintJenkins(jenkins)
 		case "save":
+			jenkins = jtmp
 			if len(in) == 3 && (in[2] == "-f" || in[2] == "--force-save") {
-				//TODO: save yaml
+				WriteYaml(jtmp)
 			}
 		case "pwd", "user", "use", "name", "uri":
-			//third := in[2]
-			//TODO: set profile
+			if len(in) >= 3 {
+				third := in[2]
+				switch second {
+				case "user":
+					jtmp.User = third
+				case "name":
+					jtmp.Name = third
+				case "pwd":
+					jtmp.Password = third
+				case "uri":
+					jtmp.Uri = third
+				case "use":
+					//TODO: load new profile
+				}
+			}
 		}
 		return
 	//TODO: add jenkins api and credential middleware

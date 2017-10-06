@@ -20,24 +20,9 @@ func main() {
 	fmt.Println("Please use `exit` or `Ctrl-D` to exit this program..")
 	defer fmt.Println("Bye!")
 
-	Init()
+	jenny.Init()
 
 	Menu()
-}
-
-func Init() {
-	isConfigured := jenny.IsConfigured()
-
-	if !isConfigured {
-		jenny.Init(isConfigured)
-	}
-
-	//j := jenny.Jenkins{
-	//Uri:      "uri",
-	//User:     "user",
-	//Password: "sd",
-	//}
-	//correct := j.PasswordMatch("sd")
 }
 
 func Menu() {

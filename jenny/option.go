@@ -91,6 +91,7 @@ var profile = []prompt.Suggest{
 	{Text: "name", Description: "If you have multiple Jenkins profiles, default: Default."},
 	{Text: "use", Description: "Use different Jenkins credentials."},
 
+	{Text: "show", Description: "Show thw current profile configuration."},
 	{Text: "cancel", Description: "Close and discard configuration."},
 	{Text: "save", Description: "Save and close configuration."},
 }
