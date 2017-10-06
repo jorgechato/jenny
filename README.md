@@ -1,4 +1,5 @@
-# Jenny [![Build Status](https://travis-ci.org/jorgechato/jenny.svg?branch=master)](https://travis-ci.org/jorgechato/jenny)
+# Jenny
+[![Go Report Card](https://goreportcard.com/badge/github.com/jorgechato/jenny)](https://goreportcard.com/report/github.com/jorgechato/jenny) [![Build Status](https://travis-ci.org/jorgechato/jenny.svg?branch=master)](https://travis-ci.org/jorgechato/jenny)
 ## Run
 ```bash
 $ jenny
