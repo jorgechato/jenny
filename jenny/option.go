@@ -18,10 +18,10 @@ func optionCompleter(args []string, long bool) []prompt.Suggest {
 
 	var suggests []prompt.Suggest
 	commandArgs := excludeOptions(args)
-	if commandArgs[1] == "save" {
-		suggests = flagSave
-	} else if commandArgs[1] == "show" {
+	if commandArgs[1] == "show" {
 		suggests = flagShow
+	} else if commandArgs[1] == "save" {
+		suggests = flagInit
 	}
 
 	if long {
@@ -90,15 +90,20 @@ var profile = []prompt.Suggest{
 	{Text: "uri", Description: "Location of the Jenkins server."},
 	{Text: "user", Description: "Username credential."},
 	{Text: "pwd", Description: "Password credential."},
-	{Text: "name", Description: "If you have multiple Jenkins profiles, default: Default."},
-	{Text: "use", Description: "Use different Jenkins credentials."},
+	{Text: "project", Description: "Unique id of the Job/Pipeline."},
 
 	{Text: "show", Description: "Show the current profile configuration."},
-	{Text: "cancel", Description: "Close and discard configuration."},
-	{Text: "save", Description: "Save and close configuration."},
+
+	{Text: "cancel", Description: "Discard configuration."},
+	{Text: "save", Description: "Save current configuration in .jenny.yml file."},
+	{Text: "clear", Description: "Remove .jenny.yml file."},
+
+	{Text: "logout"},
+	{Text: "login"},
 }
 
 var actions = []prompt.Suggest{
+	{Text: "open", Description: "Opens the UI dashboard of this project in the browser."},
 	{Text: "get", Description: "Display one or many resources"},
 	{Text: "describe", Description: "Show details of a specific resource or group of resources"},
 	{Text: "create", Description: "Create a resource by filename or stdin"},
@@ -114,20 +119,22 @@ var actions = []prompt.Suggest{
 
 	{Text: "exit", Description: "Exit this program."},
 	{Text: "quit", Description: "Exit this program."},
-}
 
-var optionHelp = []prompt.Suggest{
 	{Text: "help"},
 }
 
-var flagSave = []prompt.Suggest{
-	{Text: "--force-save", Description: "Save current configuration in .jenny.yml file."},
+var flagInit = []prompt.Suggest{
+	{Text: "--global", Description: "Create .jenny.yml in $HOME directory."},
 	// aliases
-	{Text: "-f", Description: "Save current configuration in .jenny.yml file."},
+	{Text: "-g", Description: "Uncover the password."},
 }
 
 var flagShow = []prompt.Suggest{
 	{Text: "--uncover", Description: "Uncover the password."},
 	// aliases
 	{Text: "-u", Description: "Uncover the password."},
+}
+
+var optionHelp = []prompt.Suggest{
+	{Text: "help"},
 }

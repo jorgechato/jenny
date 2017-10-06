@@ -3,18 +3,26 @@ package jenny
 //import "gopkg.in/yaml.v2"
 
 type Jenkins struct {
-	Name     string `yaml:"name"`
+	Project  string `yaml:"project"`
 	Uri      string `yaml:"uri"`
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
 }
 
 var jenkins = Jenkins{}
-var jtmp = Jenkins{Name: "Default"}
+var jtmp = Jenkins{}
 
 func (j *Jenkins) IsEmpty() bool {
-	if j.Name == "" || j.User == "" || j.Uri == "" || j.Password == "" {
+	if j.User == "" || j.Uri == "" || j.Password == "" {
 		return true
 	}
 	return false
+}
+
+func (j *Jenkins) isProject() bool {
+	return j.Project != ""
+}
+
+func (j *Jenkins) IsUri() bool {
+	return j.Uri != ""
 }

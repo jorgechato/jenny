@@ -11,51 +11,82 @@ import (
 
 var filename = fmt.Sprintf("%s/.jenny.yml", os.Getenv("HOME"))
 
-func Init() {
-	if !IsConfigured() {
+func Init(msg bool) {
+	if !IsConfigured() && msg {
 		color.Red("No %s found please type profile.\n", filename)
 	}
 }
 
 func IsConfigured() bool {
-	jtmp = ReadYaml(jtmp)
+	jtmp, err := ReadYaml(jtmp)
 
-	if jtmp.IsEmpty() {
-		return false
+	if !err {
+		jenkins = jtmp
+		return true
 	}
-	jenkins = jtmp
-	return true
+	return false
 }
 
 func WriteYaml(j Jenkins) {
-	if !j.IsEmpty() {
-		//struct to yaml
-		d, err := yaml.Marshal(&j)
-		check(err)
-		//write file
-		//TODO: check if profile is stored and change it
-		//TODO: keep the rest of profiles stored
-		err = ioutil.WriteFile(filename, d, 0644)
-		check(err)
-	}
+	//struct to yaml
+	j.Password = ""
+	j.User = ""
+	d, err := yaml.Marshal(&j)
+	check(err)
+	//write file
+	err = ioutil.WriteFile(filename, d, 0644)
+	check(err)
+
 	return
 }
 
-//TODO: read specific profile, read only profile, read default profile
-func ReadYaml(j Jenkins) Jenkins {
+//color.Red("You don't have the right credentials (fill the profile).")
+
+func RemoveYaml() {
 	if _, err := os.Stat(filename); !os.IsNotExist(err) {
+		err := os.Remove(filename)
+		check(err)
+	}
+}
+
+func ReadYaml(j Jenkins) (Jenkins, bool) {
+	cerr := isFile()
+
+	if !cerr {
 		yamlFile, err := ioutil.ReadFile(filename)
 		check(err)
-		//TODO: read a list of jenkins struct
-		//m := make(map[interface{}]interface{})
 
 		err = yaml.Unmarshal(yamlFile, &j)
 		check(err)
 	}
-	return j
+	return j, cerr
 }
 
-func FindProfile() {
+func isFile() bool {
+	dir, e := os.Getwd()
+	check(e)
+	currentFile := fmt.Sprintf("%s/.jenny.yml", dir)
+
+	if _, err := os.Stat(currentFile); !os.IsNotExist(err) {
+		filename = currentFile
+		return false
+	} else if _, err := os.Stat(filename); !os.IsNotExist(err) {
+		return false
+	}
+
+	return true
+}
+
+func SetFilename(global bool) {
+	dir, e := os.Getwd()
+	check(e)
+	currentFile := fmt.Sprintf("%s/.jenny.yml", dir)
+
+	if global {
+		filename = fmt.Sprintf("%s/.jenny.yml", os.Getenv("HOME"))
+	} else {
+		filename = currentFile
+	}
 }
 
 func check(e error) {

@@ -2,6 +2,7 @@ package jenny
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 	"os"
 	"strings"
 )
@@ -32,36 +33,49 @@ func Executor(s string) {
 			PrintJenkins(jenkins, uncover)
 		case "save":
 			jenkins = jtmp
+			SetFilename(len(in) == 3 && (in[2] == "-g" || in[2] == "--global"))
+			WriteYaml(jenkins)
+		case "login":
 			if len(in) == 3 && (in[2] == "-f" || in[2] == "--force-save") {
 				WriteYaml(jtmp)
+				//TODO: create client if credentials
 			}
-		case "pwd", "user", "use", "name", "uri":
+		case "logout":
+			Init(false)
+		case "clear":
+			RemoveYaml()
+			Init(false)
+		case "pwd", "user", "use", "project", "uri":
 			if len(in) >= 3 {
 				third := in[2]
 				switch second {
 				case "user":
 					jtmp.User = third
-				case "name":
-					jtmp.Name = third
+				case "project":
+					jtmp.Project = third
+					jenkins.Project = third
 				case "pwd":
 					jtmp.Password = third
 				case "uri":
 					jtmp.Uri = third
-				case "use":
-					//TODO: load new profile
 				}
 			}
 		}
 		return
-	default:
-		if jenkins.IsEmpty() {
-			fmt.Println("You don't have the right credentials (fill the profile).")
-			return
+	case "open":
+		if jenkins.IsUri() {
+			OpenLink(jenkins)
 		}
-		switch first {
-		case "":
-		default:
+	default:
+		if client == "" {
+			color.Yellow("Please login first!")
 			return
+		} else {
+			switch first {
+			case "":
+			default:
+				return
+			}
 		}
 		return
 	}

@@ -21,7 +21,7 @@ func main() {
 	color.Yellow("Please use `quit` or `Ctrl-D` to exit this program..")
 	defer color.Yellow("Bye!")
 
-	jenny.Init()
+	jenny.Init(true)
 
 	Menu()
 }
