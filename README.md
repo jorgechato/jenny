@@ -6,11 +6,11 @@ $ jenny
 ## Use
 Command | Action | Status
 --- | --- | ---
-profile uri <var> | Location of the Jenkins server | ready
-profile user <var> | Username credential | ready
-profile pwd <var> | Password credential | ready
-profile name <var> | If you have multiple Jenkins profiles, default: Default | ready
-profile use <var> | Use different Jenkins credentials | pending
+profile uri [var] | Location of the Jenkins server | ready
+profile user [var] | Username credential | ready
+profile pwd [var] | Password credential | ready
+profile name [var] | If you have multiple Jenkins profiles, default: Default | ready
+profile use [var] | Use different Jenkins credentials | pending
 profile show | Show the current profile configuration | ready
 profile show -u | Uncover the password. | ready
 profile show --uncover | Uncover the password. | ready
