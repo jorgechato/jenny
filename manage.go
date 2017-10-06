@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/c-bata/go-prompt"
+	"github.com/fatih/color"
 	"github.com/jorgechato/jenny/jenny"
 )
 
@@ -17,8 +18,8 @@ func main() {
 
 	fmt.Println(jenny.Banner())
 	fmt.Printf("Jenny %s (rev-%s) powered with ❤ by Jorge Chato\n", version, revision)
-	fmt.Println("Please use `exit` or `Ctrl-D` to exit this program..")
-	defer fmt.Println("Bye!")
+	color.Yellow("Please use `quit` or `Ctrl-D` to exit this program..")
+	defer color.Yellow("Bye!")
 
 	jenny.Init()
 

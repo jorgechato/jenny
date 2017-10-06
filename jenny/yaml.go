@@ -2,6 +2,7 @@ package jenny
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -12,7 +13,7 @@ var filename = fmt.Sprintf("%s/.jenny.yml", os.Getenv("HOME"))
 
 func Init() {
 	if !IsConfigured() {
-		fmt.Printf("No %s found please type profile.\n", filename)
+		color.Red("No %s found please type profile.\n", filename)
 	}
 }
 
@@ -64,8 +65,13 @@ func check(e error) {
 	}
 }
 
-func PrintJenkins(j Jenkins) {
-	d, err := yaml.Marshal(&j)
+func PrintJenkins(j Jenkins, u bool) {
+	tmp := j
+	if !u {
+		tmp.Password = "******"
+	}
+
+	d, err := yaml.Marshal(&tmp)
 	check(err)
 	fmt.Printf("--- Profile:\n%s", string(d))
 }

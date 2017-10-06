@@ -19,7 +19,9 @@ func optionCompleter(args []string, long bool) []prompt.Suggest {
 	var suggests []prompt.Suggest
 	commandArgs := excludeOptions(args)
 	if commandArgs[1] == "save" {
-		suggests = flagProfile
+		suggests = flagSave
+	} else if commandArgs[1] == "show" {
+		suggests = flagShow
 	}
 
 	if long {
@@ -91,7 +93,7 @@ var profile = []prompt.Suggest{
 	{Text: "name", Description: "If you have multiple Jenkins profiles, default: Default."},
 	{Text: "use", Description: "Use different Jenkins credentials."},
 
-	{Text: "show", Description: "Show thw current profile configuration."},
+	{Text: "show", Description: "Show the current profile configuration."},
 	{Text: "cancel", Description: "Close and discard configuration."},
 	{Text: "save", Description: "Save and close configuration."},
 }
@@ -118,8 +120,14 @@ var optionHelp = []prompt.Suggest{
 	{Text: "help"},
 }
 
-var flagProfile = []prompt.Suggest{
+var flagSave = []prompt.Suggest{
 	{Text: "--force-save", Description: "Save current configuration in .jenny.yml file."},
 	// aliases
 	{Text: "-f", Description: "Save current configuration in .jenny.yml file."},
+}
+
+var flagShow = []prompt.Suggest{
+	{Text: "--uncover", Description: "Uncover the password."},
+	// aliases
+	{Text: "-u", Description: "Uncover the password."},
 }

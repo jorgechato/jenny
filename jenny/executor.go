@@ -26,8 +26,10 @@ func Executor(s string) {
 				os.Exit(0)
 				return
 			}
+			jtmp = jenkins
 		case "show":
-			PrintJenkins(jenkins)
+			uncover := len(in) == 3 && (in[2] == "-u" || in[2] == "--uncover")
+			PrintJenkins(jenkins, uncover)
 		case "save":
 			jenkins = jtmp
 			if len(in) == 3 && (in[2] == "-f" || in[2] == "--force-save") {
@@ -51,10 +53,16 @@ func Executor(s string) {
 			}
 		}
 		return
-	//TODO: add jenkins api and credential middleware
-	case "":
-		return
 	default:
+		if jenkins.IsEmpty() {
+			fmt.Println("You don't have the right credentials (fill the profile).")
+			return
+		}
+		switch first {
+		case "":
+		default:
+			return
+		}
 		return
 	}
 }
