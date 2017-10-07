@@ -1,10 +1,17 @@
 package jenny
 
 import (
+	"fmt"
 	"github.com/c-bata/go-prompt"
+	"github.com/fatih/color"
 	"math/rand"
 	"strings"
 	"time"
+)
+
+var (
+	version  = "a0.0"
+	revision = "alpha"
 )
 
 func optionCompleter(args []string, long bool) []prompt.Suggest {
@@ -43,9 +50,12 @@ func optionCompleter(args []string, long bool) []prompt.Suggest {
 	return prompt.FilterContains(suggests, strings.TrimLeft(args[l-1], "-"), true)
 }
 
-func Banner() string {
+func Banner() {
 	rand.Seed(time.Now().UnixNano())
-	return banner[rand.Int()%len(banner)]
+
+	fmt.Println(banner[rand.Int()%len(banner)])
+	fmt.Printf("Jenny %s (rev-%s) powered with ❤ by Jorge Chato\n", version, revision)
+	color.Yellow("Please use `quit` or `Ctrl-D` to exit this program.")
 }
 
 var banner = []string{`
@@ -124,18 +134,8 @@ var actions = []prompt.Suggest{
 	{Text: "status", Description: "Status of given build id or latest build."},
 	{Text: "logs", Description: "Print the logs for a build."},
 	{Text: "stop", Description: "Stop a build execution."},
-	//{Text: "", Description: ""},
-	//{Text: "", Description: ""},
-	//{Text: "", Description: ""},
-
-	//{Text: "describe", Description: "Show details of a specific resource or group of resources"},
-	//{Text: "create", Description: "Create a resource by filename or stdin"},
-	//{Text: "delete", Description: "Delete resources by filenames, stdin, resources and names, or by resources and label selector."},
-	//{Text: "edit", Description: "Edit a resource on the server"},
-	//{Text: "apply", Description: "Apply a configuration to a resource by filename or stdin"},
-	//{Text: "run", Description: "Run a particular job."},
-	//{Text: "version", Description: "Print the Jenkins version information."},
-	//{Text: "explain", Description: "Documentation of resources."},
+	{Text: "build", Description: "Trigger parametrized build."},
+	{Text: "describe", Description: "Describe build history of project."},
 
 	{Text: "profile", Description: "Add or use a profile."},
 

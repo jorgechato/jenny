@@ -3,6 +3,7 @@
 ## Download and run
 - Download the latest version from [here](https://github.com/jorgechato/jenny/releases/download/alpha-bones/jenny)
 - Move it to your ***/usr/bin*** or add the folder where it lives into your **$PATH**.
+- Use the command **jenny** to start using it
 
 ```bash
 $ jenny
@@ -36,6 +37,8 @@ logs [jobname] [executionNumber] | Print the logs for a build. | ready
 logs [jobName] --last | Get the last execution. | ready
 stop [jobname] [executionNumber] | Stop a build execution. | ready
 stop [jobName] --last | Get the last execution. | ready
+build [jobName] | Trigger parametrized build. | in progress
+describe [jobName] | Describe build history of project. | ready
 
 ### Shortcuts
 KeyBinding          | Description

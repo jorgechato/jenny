@@ -32,7 +32,7 @@ func argumentsCompleter(args []string) []prompt.Suggest {
 		switch first {
 		case "profile":
 			return prompt.FilterHasPrefix(profile, second, true)
-		case "status", "logs", "stop":
+		case "status", "logs", "stop", "build", "describe", "open":
 			return prompt.FilterHasPrefix(jobsNames, second, true)
 		}
 	}

@@ -21,7 +21,3 @@ func (j *Jenkins) IsEmpty() bool {
 func (j *Jenkins) isProject() bool {
 	return j.Project != ""
 }
-
-func (j *Jenkins) IsUri() bool {
-	return j.Uri != ""
-}

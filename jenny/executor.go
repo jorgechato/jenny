@@ -18,84 +18,93 @@ func Executor(s string) {
 		fmt.Println("Bye!")
 		os.Exit(0)
 		return
+	case "help", "h":
+		help()
+	case "banner", "b":
+		Banner()
 	case "profile":
-		second := in[1]
-		switch second {
-		case "cancel":
-			Init(false)
-		case "show":
-			uncover := isFlag(in, "--uncover", "-u")
-			printJenkins(jenkins, uncover)
-		case "save":
-			force, changeFilename := areSaveFlags(in)
-			setFilename(changeFilename)
-			writeYaml(jenkins, force)
-		case "login":
-			jenkins.login()
-		case "logout":
-			Init(false)
-			if isFlag(in, "--force", "-f") {
-				writeYaml(jenkins, false)
-			}
-		case "clear":
-			removeYaml()
-			Init(false)
-		case "pwd", "user", "project", "uri":
-			if len(in) >= 3 {
-				third := in[2]
-				switch second {
-				case "user":
-					jenkins.User = third
-				case "project":
-					jenkins.Project = third
-				case "pwd":
-					jenkins.Password = third
-				case "uri":
-					jenkins.Uri = third
+		typoError(in, 2, func() {
+			second := in[1]
+			switch second {
+			case "cancel":
+				Init(false)
+			case "show":
+				uncover := isFlag(in, "--uncover", "-u")
+				printJenkins(jenkins, uncover)
+			case "save":
+				force, changeFilename := areSaveFlags(in)
+				setFilename(changeFilename)
+				writeYaml(jenkins, force)
+			case "login":
+				jenkins.login()
+			case "logout":
+				Init(false)
+				if isFlag(in, "--force", "-f") {
+					writeYaml(jenkins, false)
 				}
+			case "clear":
+				removeYaml()
+				Init(false)
+			case "pwd", "user", "project", "uri":
+				typoError(in, 3, func() {
+					third := in[2]
+					switch second {
+					case "user":
+						jenkins.User = third
+					case "project":
+						jenkins.Project = third
+					case "pwd":
+						jenkins.Password = third
+					case "uri":
+						jenkins.Uri = third
+					}
+				})
 			}
-		}
+		})
 		return
-	case "open":
-		if jenkins.IsUri() {
-			openLink(jenkins)
-		}
 	default:
 		if client == nil {
 			color.Red("Login first!")
 			return
 		} else {
-			if len(in) >= 2 {
+			typoError(in, 2, func() {
 				second := in[1]
 				switch first {
+				case "build":
+					build(client, second)
+					//TODO: build
+				case "open":
+					openLink(client, second)
+				case "describe":
+					describeJob(client, second)
 				case "status":
-					if isFlag(in, "--last", "-l") {
-						getLastStatus(client, second)
-					} else {
-						if len(in) >= 3 {
+					typoError(in, 3, func() {
+						if isFlag(in, "--last", "-l") {
+							getLastStatus(client, second)
+						} else {
 							getStatus(client, second, stringToInt64(in[2]))
 						}
-					}
+					})
 				case "logs":
-					if isFlag(in, "--last", "-l") {
-						getLastLogs(client, second)
-					} else {
-						if len(in) >= 3 {
+					typoError(in, 3, func() {
+						if isFlag(in, "--last", "-l") {
+							getLastLogs(client, second)
+						} else {
 							getLogs(client, second, stringToInt64(in[2]))
 						}
-					}
+					})
 				case "stop":
-					if isFlag(in, "--last", "-l") {
-						stopLastExecution(client, second)
-					} else {
-						if len(in) >= 3 {
+					typoError(in, 3, func() {
+						if isFlag(in, "--last", "-l") {
+							stopLastExecution(client, second)
+						} else {
 							stopExecution(client, second, stringToInt64(in[2]))
 						}
-					}
+					})
 				default:
 					return
 				}
-			}
+			})
 		}
 		return
 	}
@@ -106,7 +115,7 @@ func stringToInt64(s string) int64 {
 	if err == nil {
 		return n
 	}
-	return 1
+	return -1
 }
 
 func isFlag(in []string, s string, a string) bool {
@@ -122,4 +131,12 @@ func isFlag(in []string, s string, a string) bool {
 
 func areSaveFlags(in []string) (bool, bool) {
 	return isFlag(in, "--force", "-f"), isFlag(in, "--global", "-g")
+}
+
+func typoError(in []string, n int, callback func()) {
+	if len(in) >= n {
+		callback()
+	} else {
+		color.Red("Wrong command!")
+	}
 }
