@@ -12,10 +12,10 @@ $ jenny
 ### Profile
 Command | Action | Status
 --- | --- | ---
-profile uri [JenkinsURI] | Location of the Jenkins server | ready
-profile user [userName] | Username credential | ready
-profile pwd [password] | Password credential | ready
-profile project [projectName] | Unique id of the Job/Pipeline | ready
+profile uri \<JenkinsURI\> | Location of the Jenkins server | ready
+profile user \<userName\> | Username credential | ready
+profile pwd \<password\> | Password credential | ready
+profile project \<projectName\> | Unique id of the Job/Pipeline | ready
 profile show | Show the current profile configuration | ready
 profile show --uncover | Uncover the password. | ready
 profile logout | Logout | ready
@@ -31,14 +31,14 @@ profile cancel | Discard configuration | ready
 Command | Action | Status
 --- | --- | ---
 open | Opens the UI dashboard of this project in the browser. | ready
-status [jobName] [executionNumber] | Status of given build id or latest build. | ready
-status [jobName] --last | Get the last execution. | ready
-logs [jobname] [executionNumber] | Print the logs for a build. | ready
-logs [jobName] --last | Get the last execution. | ready
-stop [jobname] [executionNumber] | Stop a build execution. | ready
-stop [jobName] --last | Get the last execution. | ready
-build [jobName] | Trigger parametrized build. | in progress
-describe [jobName] | Describe build history of project. | ready
+status \<jobName\> \<executionNumber\> | Status of given build id or latest build. | ready
+status \<jobName\> --last | Get the last execution. | ready
+logs \<jobname\> \<executionNumber\> | Print the logs for a build. | ready
+logs \<jobName\> --last | Get the last execution. | ready
+stop \<jobname\> \<executionNumber\> | Stop a build execution. | ready
+stop \<jobName\> --last | Get the last execution. | ready
+build \<jobName\> | Trigger parametrized build. | in progress (ready without params)
+describe \<jobName\> | Describe build history of project. | ready
 
 ### Shortcuts
 KeyBinding          | Description
