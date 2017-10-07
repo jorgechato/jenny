@@ -10,7 +10,6 @@ type Jenkins struct {
 }
 
 var jenkins = Jenkins{}
-var jtmp = Jenkins{}
 
 func (j *Jenkins) IsEmpty() bool {
 	if j.User == "" || j.Uri == "" || j.Password == "" {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/fatih/color"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -21,62 +22,104 @@ func Executor(s string) {
 		second := in[1]
 		switch second {
 		case "cancel":
-			if jenkins.IsEmpty() {
-				fmt.Println("Configuration aborted")
-				fmt.Println("Bye!")
-				os.Exit(0)
-				return
-			}
-			jtmp = jenkins
+			Init(false)
 		case "show":
-			uncover := len(in) == 3 && (in[2] == "-u" || in[2] == "--uncover")
-			PrintJenkins(jenkins, uncover)
+			uncover := isFlag(in, "--uncover", "-u")
+			printJenkins(jenkins, uncover)
 		case "save":
-			jenkins = jtmp
-			SetFilename(len(in) == 3 && (in[2] == "-g" || in[2] == "--global"))
-			WriteYaml(jenkins)
+			force, changeFilename := areSaveFlags(in)
+			setFilename(changeFilename)
+			writeYaml(jenkins, force)
 		case "login":
-			if len(in) == 3 && (in[2] == "-f" || in[2] == "--force-save") {
-				WriteYaml(jtmp)
-				//TODO: create client if credentials
-			}
+			jenkins.login()
 		case "logout":
 			Init(false)
+			if isFlag(in, "--force", "-f") {
+				writeYaml(jenkins, false)
+			}
 		case "clear":
-			RemoveYaml()
+			removeYaml()
 			Init(false)
-		case "pwd", "user", "use", "project", "uri":
+		case "pwd", "user", "project", "uri":
 			if len(in) >= 3 {
 				third := in[2]
 				switch second {
 				case "user":
-					jtmp.User = third
+					jenkins.User = third
 				case "project":
-					jtmp.Project = third
 					jenkins.Project = third
 				case "pwd":
-					jtmp.Password = third
+					jenkins.Password = third
 				case "uri":
-					jtmp.Uri = third
+					jenkins.Uri = third
 				}
 			}
 		}
 		return
 	case "open":
 		if jenkins.IsUri() {
-			OpenLink(jenkins)
+			openLink(jenkins)
 		}
 	default:
-		if client == "" {
-			color.Yellow("Please login first!")
+		if client == nil {
+			color.Red("Login first!")
 			return
 		} else {
-			switch first {
-			case "":
-			default:
-				return
+			if len(in) >= 2 {
+				second := in[1]
+				switch first {
+				case "status":
+					if isFlag(in, "--last", "-l") {
+						getLastStatus(client, second)
+					} else {
+						if len(in) >= 3 {
+							getStatus(client, second, stringToInt64(in[2]))
+						}
+					}
+				case "logs":
+					if isFlag(in, "--last", "-l") {
+						getLastLogs(client, second)
+					} else {
+						if len(in) >= 3 {
+							getLogs(client, second, stringToInt64(in[2]))
+						}
+					}
+				case "stop":
+					if isFlag(in, "--last", "-l") {
+						stopLastExecution(client, second)
+					} else {
+						if len(in) >= 3 {
+							stopExecution(client, second, stringToInt64(in[2]))
+						}
+					}
+				default:
+					return
+				}
 			}
 		}
 		return
 	}
+}
+
+func stringToInt64(s string) int64 {
+	n, err := strconv.ParseInt(s, 10, 64)
+	if err == nil {
+		return n
+	}
+	return 1
+}
+
+func isFlag(in []string, s string, a string) bool {
+	isThere := false
+	for _, action := range in {
+		isThere = action == a || action == s
+		if isThere {
+			break
+		}
+	}
+	return isThere
+}
+
+func areSaveFlags(in []string) (bool, bool) {
+	return isFlag(in, "--force", "-f"), isFlag(in, "--global", "-g")
 }

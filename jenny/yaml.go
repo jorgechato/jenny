@@ -9,28 +9,28 @@ import (
 	"os"
 )
 
-var filename = fmt.Sprintf("%s/.jenny.yml", os.Getenv("HOME"))
+var filename string
 
 func Init(msg bool) {
-	if !IsConfigured() && msg {
+	if !isConfigured() && msg {
 		color.Red("No %s found please type profile.\n", filename)
+	} else {
+		jenkins.login()
 	}
 }
 
-func IsConfigured() bool {
-	jtmp, err := ReadYaml(jtmp)
-
-	if !err {
-		jenkins = jtmp
-		return true
-	}
-	return false
+func isConfigured() bool {
+	jtmp, err := readYaml(jenkins)
+	jenkins = jtmp
+	return !err
 }
 
-func WriteYaml(j Jenkins) {
+func writeYaml(j Jenkins, force bool) {
 	//struct to yaml
-	j.Password = ""
-	j.User = ""
+	if !force {
+		j.Password = ""
+		j.User = ""
+	}
 	d, err := yaml.Marshal(&j)
 	check(err)
 	//write file
@@ -40,16 +40,14 @@ func WriteYaml(j Jenkins) {
 	return
 }
 
-//color.Red("You don't have the right credentials (fill the profile).")
-
-func RemoveYaml() {
+func removeYaml() {
 	if _, err := os.Stat(filename); !os.IsNotExist(err) {
 		err := os.Remove(filename)
 		check(err)
 	}
 }
 
-func ReadYaml(j Jenkins) (Jenkins, bool) {
+func readYaml(j Jenkins) (Jenkins, bool) {
 	cerr := isFile()
 
 	if !cerr {
@@ -66,6 +64,7 @@ func isFile() bool {
 	dir, e := os.Getwd()
 	check(e)
 	currentFile := fmt.Sprintf("%s/.jenny.yml", dir)
+	filename = fmt.Sprintf("%s/.jenny.yml", os.Getenv("HOME"))
 
 	if _, err := os.Stat(currentFile); !os.IsNotExist(err) {
 		filename = currentFile
@@ -77,7 +76,7 @@ func isFile() bool {
 	return true
 }
 
-func SetFilename(global bool) {
+func setFilename(global bool) {
 	dir, e := os.Getwd()
 	check(e)
 	currentFile := fmt.Sprintf("%s/.jenny.yml", dir)
@@ -92,11 +91,10 @@ func SetFilename(global bool) {
 func check(e error) {
 	if e != nil {
 		log.Fatalf("error: %v", e)
-		panic(e)
 	}
 }
 
-func PrintJenkins(j Jenkins, u bool) {
+func printJenkins(j Jenkins, u bool) {
 	tmp := j
 	if !u {
 		tmp.Password = "******"

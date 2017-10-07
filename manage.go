@@ -23,10 +23,10 @@ func main() {
 
 	jenny.Init(true)
 
-	Menu()
+	menu()
 }
 
-func Menu() {
+func menu() {
 	p := prompt.New(
 		jenny.Executor,
 		jenny.Completer,

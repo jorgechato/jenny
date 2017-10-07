@@ -27,11 +27,13 @@ func argumentsCompleter(args []string) []prompt.Suggest {
 	}
 
 	first := args[0]
-	switch first {
-	case "profile":
+	if len(args) == 2 {
 		second := args[1]
-		if len(args) == 2 {
+		switch first {
+		case "profile":
 			return prompt.FilterHasPrefix(profile, second, true)
+		case "status", "logs", "stop":
+			return prompt.FilterHasPrefix(jobsNames, second, true)
 		}
 	}
 
