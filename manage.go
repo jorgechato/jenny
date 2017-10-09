@@ -8,9 +8,10 @@ import (
 
 func main() {
 	jenny.Banner()
-	defer func() {
-		fmt.Println("Bye!", recover()) // never go here
-	}()
+	//defer func() {
+	//fmt.Println("Bye!", recover()) // never go here
+	//}()
+	defer fmt.Println("Bye!")
 
 	jenny.Init(true)
 

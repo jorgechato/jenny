@@ -22,9 +22,9 @@ func (j *Jenkins) login() {
 
 func isLogin(e error, callback func()) {
 	if e != nil {
-		color.Red("Something went wrong, check typos and profile info.")
+		msg := fmt.Sprintf("Something went wrong, ERROR: %s.", e)
+		color.Red(msg)
 		color.Yellow("For more information type: profile show -u")
-		return
 	} else {
 		callback()
 	}
@@ -97,9 +97,9 @@ func getLastLogs(c *gojenkins.Jenkins, name string) {
 
 func stopExecution(c *gojenkins.Jenkins, name string, number int64) {
 	getBuild(c, name, number, func(build *gojenkins.Build) {
-		s, _ := build.Stop()
+		_, e := build.Stop()
 
-		if s {
+		if e != nil {
 			setColor("FAILURE")
 		} else {
 			setColor("SUCCESS")
@@ -109,9 +109,9 @@ func stopExecution(c *gojenkins.Jenkins, name string, number int64) {
 
 func stopLastExecution(c *gojenkins.Jenkins, name string) {
 	getLastBuild(c, name, func(build *gojenkins.Build, isQueue bool) {
-		s, _ := build.Stop()
+		_, e := build.Stop()
 
-		if s {
+		if e != nil {
 			setColor("FAILURE")
 		} else {
 			setColor("SUCCESS")
@@ -119,15 +119,22 @@ func stopLastExecution(c *gojenkins.Jenkins, name string) {
 	})
 }
 
-func getBuild(c *gojenkins.Jenkins, name string, number int64, callback func(b *gojenkins.Build)) {
-	build, e := c.GetBuild(name, number)
+func getBuild(c *gojenkins.Jenkins, project string, number int64, callback func(b *gojenkins.Build)) {
+	//job, e := c.GetJob("chatojor_PoC_lib", project)
+	job, e := c.GetJob(project)
 	isLogin(e, func() {
-		callback(build)
+		job.Poll()
+		fmt.Println(job.GetName())
+		build, e := job.GetBuild(number)
+		isLogin(e, func() {
+			callback(build)
+		})
 	})
 }
 
 func getLastBuild(c *gojenkins.Jenkins, name string, callback func(b *gojenkins.Build, q bool)) {
 	job, e := c.GetJob(name)
+	job.Poll()
 	isLogin(e, func() {
 		isQueue, _ := job.IsQueued()
 		build, _ := job.GetLastBuild()

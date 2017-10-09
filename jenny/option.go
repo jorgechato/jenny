@@ -50,6 +50,7 @@ func optionCompleter(args []string, long bool) []prompt.Suggest {
 	return prompt.FilterContains(suggests, strings.TrimLeft(args[l-1], "-"), true)
 }
 
+//Banner
 func Banner() {
 	rand.Seed(time.Now().UnixNano())
 

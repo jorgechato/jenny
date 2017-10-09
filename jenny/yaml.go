@@ -11,6 +11,7 @@ import (
 
 var filename string
 
+//Init
 func Init(msg bool) {
 	if !isConfigured() && msg {
 		color.Red("No %s found please type profile.\n", filename)

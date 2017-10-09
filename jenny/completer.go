@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+//Completer
 func Completer(d prompt.Document) []prompt.Suggest {
 	if d.TextBeforeCursor() == "" {
 		return []prompt.Suggest{}

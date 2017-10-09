@@ -1,7 +1,6 @@
 package jenny
 
-//import "gopkg.in/yaml.v2"
-
+//Jenkins struct
 type Jenkins struct {
 	Project  string `yaml:"project"`
 	Uri      string `yaml:"uri"`
@@ -11,7 +10,7 @@ type Jenkins struct {
 
 var jenkins = Jenkins{}
 
-func (j *Jenkins) IsEmpty() bool {
+func (j *Jenkins) isEmpty() bool {
 	if j.User == "" || j.Uri == "" || j.Password == "" {
 		return true
 	}
